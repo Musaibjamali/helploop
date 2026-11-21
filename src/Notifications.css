@@ -1,0 +1,339 @@
+
+.notification-bell-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.notification-bell {
+  position: relative;
+  display: grid;
+  width: 43px;
+  height: 43px;
+  place-items: center;
+  border: 1px solid #e9edf5;
+  border-radius: 13px;
+  background: #fff;
+  color: #5146df;
+  font-size: 19px;
+  transition: .2s ease;
+}
+
+.notification-bell:hover {
+  background: #f3f1ff;
+  border-color: #dcd7ff;
+  transform: translateY(-2px);
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: grid;
+  min-width: 19px;
+  height: 19px;
+  place-items: center;
+  padding: 0 4px;
+  border: 2px solid white;
+  border-radius: 20px;
+  background: #ed5470;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.notification-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(20, 27, 53, .22);
+  backdrop-filter: blur(2px);
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: calc(100% + 13px);
+  right: 0;
+  z-index: 100;
+  width: min(370px, calc(100vw - 28px));
+  max-height: 470px;
+  overflow-y: auto;
+  border: 1px solid #e9edf5;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 18px 50px rgba(25, 35, 75, .16);
+}
+
+.notification-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 17px 18px;
+  border-bottom: 1px solid #edf0f6;
+}
+
+.notification-dropdown-header h3 {
+  margin: 0;
+  color: #17213b;
+  font: 700 17px 'Outfit', sans-serif;
+}
+
+.notification-dropdown-header button {
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: #efedff;
+  color: #5146df;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  width: 100%;
+  padding: 14px 17px;
+  border: 0;
+  border-bottom: 1px solid #f0f2f7;
+  background: #fff;
+  text-align: left;
+  transition: background .2s;
+}
+
+.notification-item:hover {
+  background: #f8f7ff;
+}
+
+.notification-item.unread {
+  background: #f5f3ff;
+}
+
+.notification-avatar {
+  display: grid;
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5146df, #9473ef);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.notification-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.notification-content {
+  min-width: 0;
+  flex: 1;
+  color: #4b5670;
+  font-size: 11px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.notification-content strong {
+  color: #17213b;
+  font-weight: 800;
+}
+
+.notification-content small {
+  display: block;
+  margin-top: 5px;
+  color: #9ba3b4;
+  font-size: 9px;
+}
+
+.notification-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: #5146df;
+}
+
+.notification-empty {
+  padding: 32px 18px;
+  color: #929bb0;
+  font-size: 12px;
+  text-align: center;
+}
+
+.notifications-page {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 8px 0 30px;
+}
+
+.notifications-page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 23px;
+}
+
+.notifications-page-heading h2 {
+  margin: 0;
+  color: #17213b;
+  font: 700 25px 'Outfit', sans-serif;
+}
+
+.notifications-page-heading p {
+  margin: 7px 0 0;
+  color: #929bb0;
+  font-size: 12px;
+}
+
+.notification-mark-all {
+  padding: 11px 15px;
+  border: 1px solid #e5e2ff;
+  border-radius: 10px;
+  background: #efedff;
+  color: #5146df;
+  font-size: 11px;
+  font-weight: 800;
+  transition: .2s;
+}
+
+.notification-mark-all:hover {
+  background: #e4e0ff;
+  transform: translateY(-1px);
+}
+
+.notifications-list {
+  overflow: hidden;
+  border: 1px solid #e9edf5;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(31, 42, 85, .045);
+}
+
+.notifications-list .notification-item {
+  padding: 18px 20px;
+}
+
+.notifications-list .notification-avatar {
+  width: 45px;
+  height: 45px;
+  flex-basis: 45px;
+}
+
+.notifications-list .notification-content {
+  font-size: 12px;
+}
+
+.notifications-list .notification-content small {
+  font-size: 10px;
+}
+
+.notification-no-data {
+  display: grid;
+  min-height: 220px;
+  place-items: center;
+  padding: 30px;
+  color: #929bb0;
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .notification-dropdown {
+    position: fixed;
+    top: 75px;
+    right: 12px;
+    width: calc(100vw - 24px);
+    max-height: min(75vh, 520px);
+  }
+
+  .notifications-page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .notifications-page-heading h2 {
+    font-size: 22px;
+  }
+
+  .notifications-list {
+    border-radius: 13px;
+  }
+
+  .notifications-list .notification-item {
+    padding: 14px 12px;
+  }
+}
+
+/* HELLOOP PREMIUM NOTIFICATIONS DESIGN */
+
+.notifications-page {
+  max-width: 1050px;
+  padding: 25px 24px 35px;
+}
+
+.notifications-page-heading {
+  padding: 23px 25px;
+  border: 1px solid #e5e1f7;
+  border-radius: 19px;
+  background: linear-gradient(120deg, #ffffff, #f0edff 65%, #edf3ff);
+  box-shadow: 0 12px 30px rgba(64, 54, 145, .07);
+}
+
+.notifications-page-heading h2 {
+  color: #30265e;
+}
+
+.notifications-list {
+  border: 1px solid #e2def4;
+  border-radius: 19px;
+  background: linear-gradient(145deg, #fff, #faf9ff);
+  box-shadow: 0 13px 32px rgba(49, 43, 111, .08);
+}
+
+.notifications-list .notification-item {
+  transition: .2s ease;
+}
+
+.notifications-list .notification-item:hover {
+  background: #f3f1ff;
+}
+
+.notifications-list .notification-item.unread {
+  background: linear-gradient(100deg, #f0edff, #f7f6ff);
+}
+
+.notifications-list .notification-avatar {
+  box-shadow: 0 5px 13px rgba(81, 70, 180, .18);
+}
+
+.notification-mark-all {
+  box-shadow: 0 5px 14px rgba(81, 70, 180, .09);
+}
+
+.notification-dropdown {
+  border-color: #e1ddf5;
+  box-shadow: 0 20px 50px rgba(48, 42, 120, .18);
+}
+
+.notification-dropdown-header {
+  background: linear-gradient(120deg, #fff, #f5f3ff);
+}
+
+@media (max-width: 600px) {
+  .notifications-page {
+    padding: 17px 12px 25px;
+  }
+
+  .notifications-page-heading {
+    padding: 18px;
+  }
+}

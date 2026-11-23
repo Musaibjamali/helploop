@@ -44,7 +44,43 @@ function detectLanguage(text: string) {
   return 'en-US'
 }
 
-function fileToAttachment(file: File): Promise<Attachment> {
+async function fileToAttachment(file: File): Promise<Attachment> {
+  let uploadBlob: Blob = file
+  let mimeType = file.type
+
+  // Resize and compress images before sending them to Gemini.
+  if (file.type.startsWith('image/')) {
+    const bitmap = await createImageBitmap(file)
+    const maxDimension = 1440
+    const scale = Math.min(1, maxDimension / Math.max(bitmap.width, bitmap.height))
+    const canvas = document.createElement('canvas')
+
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale))
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale))
+
+    const context = canvas.getContext('2d')
+    if (!context) {
+      bitmap.close()
+      throw new Error(`Could not process ${file.name}`)
+    }
+
+    context.fillStyle = '#ffffff'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+    bitmap.close()
+
+    const compressed = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(
+        blob => blob ? resolve(blob) : reject(new Error(`Could not compress ${file.name}`)),
+        'image/jpeg',
+        0.78,
+      )
+    })
+
+    uploadBlob = compressed
+    mimeType = 'image/jpeg'
+  }
+
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
 
@@ -58,13 +94,13 @@ function fileToAttachment(file: File): Promise<Attachment> {
 
       resolve({
         name: file.name,
-        mimeType: file.type,
+        mimeType,
         data: result.split(',')[1],
       })
     }
 
     reader.onerror = () => reject(new Error(`Could not read ${file.name}`))
-    reader.readAsDataURL(file)
+    reader.readAsDataURL(uploadBlob)
   })
 }
 
@@ -79,6 +115,7 @@ function AIAssistant() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [loading, setLoading] = useState(false)
   const [historyLoading, setHistoryLoading] = useState(true)
+  const [deletingHistory, setDeletingHistory] = useState(false)
   const [error, setError] = useState('')
   const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null)
   const [recording, setRecording] = useState(false)
@@ -666,6 +703,54 @@ function AIAssistant() {
     }
   }
 
+  async function deleteAllHistory() {
+    if (loading || deletingHistory || conversations.length === 0) return
+
+    const confirmed = window.confirm(
+      'Delete all your HelpLoop AI chat history? This cannot be undone.',
+    )
+    if (!confirmed) return
+
+    setDeletingHistory(true)
+    setError('')
+
+    try {
+      const { data: authData, error: authError } = await supabase.auth.getUser()
+      if (authError || !authData.user) {
+        throw new Error('Please sign in again to delete your chat history.')
+      }
+
+      // Delete only rows owned by the signed-in user.
+      const { error: messagesError } = await supabase
+        .from('ai_messages')
+        .delete()
+        .eq('user_id', authData.user.id)
+
+      if (messagesError) throw messagesError
+
+      const { error: conversationsError } = await supabase
+        .from('ai_conversations')
+        .delete()
+        .eq('user_id', authData.user.id)
+
+      if (conversationsError) throw conversationsError
+
+      setConversations([])
+      setMessages([])
+      setConversationId(null)
+      setInput('')
+      setSelectedFiles([])
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Could not delete your chat history.',
+      )
+    } finally {
+      setDeletingHistory(false)
+    }
+  }
+
   async function openConversation(item: AIConversation) {
     if (loading) return
 
@@ -755,6 +840,16 @@ function AIAssistant() {
           <div className="ai-history-heading">
             <strong>Chat history</strong>
             <span>{conversations.length}</span>
+            <button
+              type="button"
+              className="ai-new-chat"
+              style={{ padding: '6px 10px', fontSize: '12px' }}
+              onClick={() => void deleteAllHistory()}
+              disabled={loading || historyLoading || deletingHistory || conversations.length === 0}
+              title="Delete all your saved AI chats"
+            >
+              {deletingHistory ? 'Deleting…' : 'Delete all'}
+            </button>
           </div>
 
           {historyLoading ? (

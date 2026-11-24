@@ -79,7 +79,9 @@ export default function Auth() {
 
           <div className="landing-nav-links">
             <a href="#features">Features</a>
+            <a href="/how-it-works.html">How It Works</a>
             <a href="#about">About</a>
+            <a href="/faq.html">FAQs</a>
           </div>
 
           <div className="landing-nav-actions">
@@ -234,6 +236,7 @@ export default function Auth() {
                 HelpLoop brings people, knowledge and helpful technology
                 together in one connected experience.
               </p>
+              <a href="/about.html">Learn more about HelpLoop →</a>
             </div>
             <button onClick={() => openAuth(false)}>
               Join HelpLoop <span>→</span>
@@ -246,11 +249,25 @@ export default function Auth() {
             <span className="landing-brand-icon">H</span>
             <strong>HelpLoop</strong>
           </div>
+
           <p>Connect. Help. Learn. Grow.</p>
+
+          <nav className="landing-footer-links" aria-label="HelpLoop information">
+            <a href="/about.html">About</a>
+            <a href="/how-it-works.html">How It Works</a>
+            <a href="/features.html">Features</a>
+            <a href="/community-guidelines.html">Community Guidelines</a>
+            <a href="/faq.html">FAQs</a>
+            <a href="/contact.html">Contact Us</a>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms &amp; Conditions</a>
+          </nav>
+
           <div className="landing-credit">
             Made &amp; Developed by <strong>Engr. Mr. Musaib</strong>
             <span>🇵🇰 Pakistan</span>
           </div>
+
           <small>© 2026 HelpLoop. All rights reserved.</small>
         </footer>
       </div>
@@ -259,7 +276,6 @@ export default function Auth() {
 
   return (
     <div className="auth-page">
-
       <div className="auth-showcase">
         <div className="auth-showcase-badge">
           <span /> YOUR SPACE TO GROW

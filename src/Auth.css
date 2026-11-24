@@ -1319,3 +1319,46 @@
   }
 }
 
+/* PUBLIC INFORMATION PAGE LINKS */
+
+.landing-footer-links {
+  width: min(900px, 100%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px 23px;
+  margin: 12px auto;
+}
+
+.landing-footer-links a,
+.landing-about a {
+  color: #a995ff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+.landing-footer-links a:hover,
+.landing-about a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.landing-about a {
+  display: inline-block;
+  margin-top: 13px;
+  font-size: 12px;
+}
+
+@media (max-width: 560px) {
+  .landing-footer-links {
+    gap: 14px 18px;
+    padding: 5px 10px;
+  }
+
+  .landing-footer-links a {
+    font-size: 11px;
+  }
+}

@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react'
 import { supabase } from './supabase'
 import './Education.css'
@@ -477,32 +478,35 @@ export default function Education() {
 
             {videoError && <p className="education-message">{videoError}</p>}
 
-            {selectedVideoId && (
-              <div className="education-video-player">
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${selectedVideoId}`}
-                  title="YouTube learning video"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
-                <button onClick={() => setSelectedVideoId('')}>
-                  Close Video
-                </button>
-              </div>
-            )}
-
             <div className="education-video-grid">
               {videos.map(video => (
                 <article className="education-video-card" key={video.videoId}>
-                  <button
-                    type="button"
-                    className="education-video-thumbnail"
-                    onClick={() => setSelectedVideoId(video.videoId)}
-                    aria-label={`Play ${video.title}`}
-                  >
-                    <img src={video.thumbnail} alt={video.title} loading="lazy" />
-                    <span>▶</span>
-                  </button>
+                  {selectedVideoId === video.videoId ? (
+                    <div className="education-video-player">
+                      <iframe
+                        src={`https://www.youtube-nocookie.com/embed/${video.videoId}?autoplay=1&playsinline=1&rel=0`}
+                        title={video.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setSelectedVideoId('')}
+                      >
+                        Close Video
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      className="education-video-thumbnail"
+                      onClick={() => setSelectedVideoId(video.videoId)}
+                      aria-label={`Play ${video.title}`}
+                    >
+                      <img src={video.thumbnail} alt={video.title} loading="lazy" />
+                      <span>▶</span>
+                    </button>
+                  )}
 
                   <div className="education-video-info">
                     <h4>{video.title}</h4>

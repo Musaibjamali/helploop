@@ -396,34 +396,59 @@ const [postSort, setPostSort] = useState<'latest' | 'oldest'>('latest')
     setCommenting('')
   }
 
-  async function deletePost(post: Post) {
-    if (!window.confirm('Kya tum apni post delete karna chahte ho?')) {
-      return
-    }
+  
+async function deletePost(post: Post) {
+  if (!window.confirm('Kya tum apni post delete karna chahte ho?')) {
+    return
+  }
 
-    if (post.image_path) {
-      const { error: photoError } = await supabase.storage
-        .from('community-photos')
-        .remove([post.image_path])
+  const { data: authData, error: authError } = await supabase.auth.getUser()
 
-      if (photoError) {
-        alert(photoError.message)
-        return
-      }
-    }
+  if (authError || !authData.user) {
+    alert('Login session nahi mili. Dobara login karo.')
+    return
+  }
 
-    const { error } = await supabase
-      .from('posts')
-      .delete()
-      .eq('id', post.id)
-      .eq('user_id', userId)
+  const currentUserId = authData.user.id
 
-    if (error) {
-      alert(error.message)
-    } else {
-      setPosts(current => current.filter(item => item.id !== post.id))
+  const { data, error } = await supabase
+    .from('posts')
+    .delete()
+    .eq('id', post.id)
+    .eq('user_id', currentUserId)
+    .select('id')
+    .maybeSingle()
+
+  if (error) {
+    alert('Delete error: ' + error.message)
+    return
+  }
+
+  if (!data) {
+    alert(
+      'Post database se delete nahi hui.\nLogin ID: ' +
+      currentUserId +
+      '\nPost Owner ID: ' +
+      post.user_id
+    )
+    return
+  }
+
+  setPosts(current => current.filter(item => item.id !== post.id))
+
+  if (post.image_path) {
+    const { error: photoError } = await supabase.storage
+      .from('community-photos')
+      .remove([post.image_path])
+
+    if (photoError) {
+      console.error('Photo delete error:', photoError.message)
     }
   }
+
+  alert('Post successfully delete ho gayi!')
+}
+
 
   async function sharePost(post: Post) {
     const shareUrl =
